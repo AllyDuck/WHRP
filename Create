@@ -1,14 +1,8 @@
-
-
-
 #working on rand_talent for humans
 #need to work out how to get rand talent twice, check if they match, and repeat if not
 #would while loops work?
 #if rand1 == rand 2, reapeat
 #else break
-
-
-
 
 from random import randint
 from time import sleep
@@ -260,7 +254,7 @@ def random_talent_list():
     elif rand_talent_roll < 72:
       rand_talent = "Strong-minded"
     elif rand_talent_roll < 77:
-      rand_talent = "Strudy"
+      rand_talent = "Sturdy"
     elif rand_talent_roll < 82:
       rand_talent = "Suave"
     elif rand_talent_roll < 87:
@@ -310,7 +304,7 @@ def random_talent_list():
     elif rand_talent_roll < 75:
       rand_talent = "Strong-minded"
     elif rand_talent_roll < 79:
-      rand_talent = "Strudy"
+      rand_talent = "Sturdy"
     elif rand_talent_roll < 83:
       rand_talent = "Suave"
     elif rand_talent_roll < 87:
@@ -323,9 +317,64 @@ def random_talent_list():
       rand_talent = "Warrior Born"
     return rand_talent
 
-    
+def x_talent_list():
+  x_rand_talent_roll = randint(1, 100)
+  if x_rand_talent_roll < 4:
+    x_rand_talent = "Acute Hearing"
+  elif x_rand_talent_roll < 9:
+    x_rand_talent = "Ambidextrous"
+  elif x_rand_talent_roll < 13:
+    x_rand_talent = "Coolheaded"
+  elif x_rand_talent_roll < 18:
+    x_rand_talent = "Excellent Vision"
+  elif x_rand_talent_roll < 22:
+    x_rand_talent = "Fleet Footed"
+  elif x_rand_talent_roll < 27:
+    x_rand_talent = "Hardy"
+  elif x_rand_talent_roll < 31:
+    x_rand_talent = "Lightning Reflexes"
+  elif x_rand_talent_roll < 35:
+    x_rand_talent = "Luck"
+  elif x_rand_talent_roll < 40:
+    x_rand_talent = "Marksman"
+  elif x_rand_talent_roll < 44:
+    x_rand_talent = "Mimic"
+  elif x_rand_talent_roll < 49:
+    x_rand_talent = "Night Vision"
+  elif x_rand_talent_roll < 53:
+    x_rand_talent = "Resistance to Disease"
+  elif x_rand_talent_roll < 57:
+    x_rand_talent = "Resistance to Magic"
+  elif x_rand_talent_roll < 61:
+    x_rand_talent = "Resistance to Poison"
+  elif x_rand_talent_roll < 66:
+    x_rand_talent = "Savvy"
+  elif x_rand_talent_roll < 71:
+    x_rand_talent = "Sixth Sense"
+  elif x_rand_talent_roll < 75:
+    x_rand_talent = "Strong-minded"
+  elif x_rand_talent_roll < 79:
+    x_rand_talent = "Sturdy"
+  elif x_rand_talent_roll < 83:
+    x_rand_talent = "Suave"
+  elif x_rand_talent_roll < 87:
+    x_rand_talent = "Super Numerate"
+  elif x_rand_talent_roll < 91:
+    x_rand_talent = "Very Resilient"
+  elif x_rand_talent_roll < 95:
+    x_rand_talent = "Very Strong"
+  elif x_rand_talent_roll < 100:
+    x_rand_talent = "Warrior Born"
+  return x_rand_talent
 
-
+#this function could probably work better. 
+def rand_talent_human():
+  rand_talent_1 = random_talent_list()
+  rand_talent_2 = rand_talent_1
+  while rand_talent_1 == rand_talent_2:
+    rand_talent_2 = random_talent_list()
+  else:
+    return [rand_talent_1, rand_talent_2]
 
 if race == "dwarf":
   miner_cook_stoneworker = input ("Choose from the following skills: (1) Trade (Miner) (2) Trade (Smith) (3) Trade (Stoneworker)" )
@@ -382,6 +431,15 @@ if race == "halfling":
   talents.append("Speacialist Weapon Group (Sling)") 
   talents.append(random_talent_list())
   
+if race == "human":
+  skills.append("Common Knowledge (the Empire)")
+  skills.append("Gossip")
+  skills.append("Speak Language (Reikspiel)")
+  talents.append(rand_talent_human()[0])
+  talents.append(rand_talent_human()[1])
+  if talents[0] == talents[1]:
+    talents[1] = rand_talent_human()
+
 #use for loop to print skills
 skills.sort()
 talents.sort()
@@ -393,3 +451,5 @@ print()
 print("Talents:")
 for i in range(len(talents)):
   print(talents[i])
+  
+#next is careers - requires a lot of writing, could it be done quicker?
