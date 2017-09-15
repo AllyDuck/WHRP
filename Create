@@ -1,0 +1,395 @@
+
+
+
+#working on rand_talent for humans
+#need to work out how to get rand talent twice, check if they match, and repeat if not
+#would while loops work?
+#if rand1 == rand 2, reapeat
+#else break
+
+
+
+
+from random import randint
+from time import sleep
+
+print("")
+print("Welcome to Warhammer Fantasy Roleplay")
+print("Let's create your character!")
+print("")
+
+#Choose race, check if acceptable
+print("You can be a human, elf, dwarf, or halfling")
+valid_race = False
+while valid_race == False:
+  print("")
+  race = input("What race do you want to be? ").lower()
+  print("")
+  if race == "human" or race == "dwarf" or race == "halfling" or race == "elf":
+    valid_race = True
+    break
+  else:
+    print("You can be a human, dwarf, elf, or halfling. Please choose again")
+
+#Confirm race
+print("")
+if race == "elf":
+  print("You are an elf")
+else:
+  print("You are a " + race) 
+print()
+
+#define roll function and wounds/fate calculation
+def roll(n):
+  count = 0
+  roll = 0
+  while count < n:
+    roll += randint(1, 10)
+    count += 1
+  return roll
+  
+def wounds(race_W):
+  wounds_roll = roll(1)
+  if wounds_roll < 3:
+    wound_sub = 10
+  elif wounds_roll < 6:
+    wound_sub = 11
+  elif wounds_roll < 9:
+    wound_sub = 12
+  else:
+    wound_sub = 13
+    
+  if race_W == "dwarf":
+    wound_sub += 1
+  if race_W == "elf":
+    wound_sub -= 1
+  if race_W == "halfling":
+    wound_sub -= 2
+  else: 
+    wound_sub = wound_sub
+    
+  return wound_sub
+  
+def fate(race_FP):
+  fate_roll = roll(1)
+  if race_FP == "human":
+    if fate_roll < 4:
+      fate_sub = 2
+    else:
+      fate_sub = 3
+
+  if race_FP == "dwarf":
+    if fate_roll < 4:
+      fate_sub = 1
+    elif fate_roll < 7:
+      fate_sub = 2
+    else:
+      fate_sub = 3
+      
+  if race_FP == "elf":
+    if fate_roll < 4:
+      fate_sub = 1
+    else:
+      fate_sub = 2
+      
+  if race_FP == "halfling":
+    if fate_roll < 7:
+      fate_sub = 2
+    else:
+      fate_sub = 3
+
+  return fate_sub
+  
+#calculates characteristics to populate dictionary  
+if race == "dwarf":
+  char_WS = 30 + roll(2)
+  char_BS = 20 + roll(2)
+  char_S = 20 + roll(2)
+  char_T = 30 + roll(2)
+  char_Ag = 10 + roll(2)
+  char_Int = 20 + roll(2)
+  char_WP = 20 + roll(2)
+  char_Fel = 10 + roll(2)
+  char_A = 1
+  char_W = wounds(race)
+  char_SB = int(char_S / 10)
+  char_TB = int(char_T / 10)
+  char_M = 3
+  char_Mag = 0 
+  char_IP = 0
+  char_FP = fate(race)
+  
+if race == "elf":
+  char_WS = 20 + roll(2)
+  char_BS = 30 + roll(2)
+  char_S = 20 + roll(2)
+  char_T = 20 + roll(2)
+  char_Ag = 30 + roll(2)
+  char_Int = 20 + roll(2)
+  char_WP = 20 + roll(2)
+  char_Fel = 10 + roll(2)
+  char_A = 1
+  char_W = wounds(race)
+  char_SB = int(char_S / 10)
+  char_TB = int(char_T / 10)
+  char_M = 5
+  char_Mag = 0 
+  char_IP = 0
+  char_FP = fate(race)
+
+if race == "halfling":
+  char_WS = 10 + roll(2)
+  char_BS = 30 + roll(2)
+  char_S = 10 + roll(2)
+  char_T = 10 + roll(2)
+  char_Ag = 30 + roll(2)
+  char_Int = 20 + roll(2)
+  char_WP = 20 + roll(2)
+  char_Fel = 30 + roll(2)
+  char_A = 1
+  char_W = wounds(race)
+  char_SB = int(char_S / 10)
+  char_TB = int(char_T / 10)
+  char_M = 4
+  char_Mag = 0 
+  char_IP = 0
+  char_FP = fate(race)
+  
+if race == "human":
+  char_WS = 20 + roll(2)
+  char_BS = 20 + roll(2)
+  char_S = 20 + roll(2)
+  char_T = 20 + roll(2)
+  char_Ag = 20 + roll(2)
+  char_Int = 20 + roll(2)
+  char_WP = 20 + roll(2)
+  char_Fel = 20 + roll(2)
+  char_A = 1
+  char_W = wounds(race)
+  char_SB = int(char_S / 10)
+  char_TB = int(char_T / 10)
+  char_M = 4
+  char_Mag = 0 
+  char_IP = 0
+  char_FP = fate(race)
+
+#Main/Secondary profiles, based on above rolls 
+Main_Profile = {
+  "Weapon Skill": char_WS, 
+  "Ballistic Skill": char_BS,
+  "Strength": char_S,
+  "Toughness": char_T,
+  "Agility": char_Ag,
+  "Intelligence": char_Int,
+  "Will Power": char_WP,
+  "Fellowship": char_Fel,
+}
+
+Secondary_Profile = {
+  "Attacks": char_A,
+  "Wounds": char_W,
+  "Strength Bonus": char_SB,
+  "Toughness Bones": char_TB,
+  "Movement": char_M,
+  "Magic": char_Mag,
+  "Insanity Points": char_IP,
+  "Fate Points": char_FP
+}
+
+#readable display of dictionaries
+table_main = """
+| WS | BS | S  | T  | Ag | Int| WP | Fel|
+| {} | {} | {} | {} | {} | {} | {} | {} |
+""".format(char_WS, char_BS, char_S, char_T, char_Ag, char_Int, char_WP, char_Fel)
+
+if char_W < 10:
+  char_W_space = str(char_W) + " "
+else:
+  char_W_space = char_W
+
+table_secondary = """
+| A  | W  | SB | TB | M  | Mag| IP | FP |
+| {}  | {} | {}  | {}  | {}  | {}  | {}  | {}  |
+""".format(char_A, char_W_space, char_SB, char_TB, char_M, char_Mag, char_IP, char_FP)
+
+print(table_main)
+print("")
+print(table_secondary)
+
+#determine what skills the character has
+#then display in a readable format
+#also need random talent table
+
+skills = []
+talents = []
+
+#Random talent table - could this be done with a dictionary?
+def random_talent_list():
+  if race == "halfling":
+    rand_talent_roll = randint(1, 100)
+    if rand_talent_roll < 5:
+      rand_talent = "Acute Hearing"
+    elif rand_talent_roll < 10:
+      rand_talent = "Ambidextrous"
+    elif rand_talent_roll < 15:
+      rand_talent = "Coolheaded"
+    elif rand_talent_roll < 20:
+      rand_talent = "Excellent Vision"
+    elif rand_talent_roll < 25:
+      rand_talent = "Fleet Footed"
+    elif rand_talent_roll < 29:
+      rand_talent = "Hardy"
+    elif rand_talent_roll < 33:
+      rand_talent = "Lightning Reflexes"
+    elif rand_talent_roll < 38:
+      rand_talent = "Luck"
+    elif rand_talent_roll < 42:
+      rand_talent = "Marksman"
+    elif rand_talent_roll < 47:
+      rand_talent = "Mimic"
+    elif rand_talent_roll < 51:
+      rand_talent = "Resistance to Disease"
+    elif rand_talent_roll < 53:
+      rand_talent = "Resistance to Magic"
+    elif rand_talent_roll < 57:
+      rand_talent = "Resistance to Poison"
+    elif rand_talent_roll < 62:
+      rand_talent = "Savvy"
+    elif rand_talent_roll < 67:
+      rand_talent = "Sixth Sense"
+    elif rand_talent_roll < 72:
+      rand_talent = "Strong-minded"
+    elif rand_talent_roll < 77:
+      rand_talent = "Strudy"
+    elif rand_talent_roll < 82:
+      rand_talent = "Suave"
+    elif rand_talent_roll < 87:
+      rand_talent = "Super Numerate"
+    elif rand_talent_roll < 91:
+      rand_talent = "Very Resilient"
+    elif rand_talent_roll < 95:
+      rand_talent = "Very Strong"
+    elif rand_talent_roll < 100:
+      rand_talent = "Warrior Born"
+    return rand_talent
+    
+  if race == "human":
+    rand_talent_roll = randint(1, 100)
+    if rand_talent_roll < 4:
+      rand_talent = "Acute Hearing"
+    elif rand_talent_roll < 9:
+      rand_talent = "Ambidextrous"
+    elif rand_talent_roll < 13:
+      rand_talent = "Coolheaded"
+    elif rand_talent_roll < 18:
+      rand_talent = "Excellent Vision"
+    elif rand_talent_roll < 22:
+      rand_talent = "Fleet Footed"
+    elif rand_talent_roll < 27:
+      rand_talent = "Hardy"
+    elif rand_talent_roll < 31:
+      rand_talent = "Lightning Reflexes"
+    elif rand_talent_roll < 35:
+      rand_talent = "Luck"
+    elif rand_talent_roll < 40:
+      rand_talent = "Marksman"
+    elif rand_talent_roll < 44:
+      rand_talent = "Mimic"
+    elif rand_talent_roll < 49:
+      rand_talent = "Night Vision"
+    elif rand_talent_roll < 53:
+      rand_talent = "Resistance to Disease"
+    elif rand_talent_roll < 57:
+      rand_talent = "Resistance to Magic"
+    elif rand_talent_roll < 61:
+      rand_talent = "Resistance to Poison"
+    elif rand_talent_roll < 66:
+      rand_talent = "Savvy"
+    elif rand_talent_roll < 71:
+      rand_talent = "Sixth Sense"
+    elif rand_talent_roll < 75:
+      rand_talent = "Strong-minded"
+    elif rand_talent_roll < 79:
+      rand_talent = "Strudy"
+    elif rand_talent_roll < 83:
+      rand_talent = "Suave"
+    elif rand_talent_roll < 87:
+      rand_talent = "Super Numerate"
+    elif rand_talent_roll < 91:
+      rand_talent = "Very Resilient"
+    elif rand_talent_roll < 95:
+      rand_talent = "Very Strong"
+    elif rand_talent_roll < 100:
+      rand_talent = "Warrior Born"
+    return rand_talent
+
+    
+
+
+
+if race == "dwarf":
+  miner_cook_stoneworker = input ("Choose from the following skills: (1) Trade (Miner) (2) Trade (Smith) (3) Trade (Stoneworker)" )
+  if miner_cook_stoneworker == "2":
+    skills.append("Trade (Smith)")
+  elif miner_cook_stoneworker == "3":
+    skills.append("Trade (Stoneworker)")  
+  else: 
+    skills.append("Trade (Miner)")
+  
+  skills.append("Common Knowledge (Dwarfs)")
+  skills.append("Speak Language (Khazalid)")
+  skills.append("Speak Language (Reikspiel)")
+  skills.append("Trade (Miner, Smith, or Stoneworker)")
+  talents.append("Dwarfcraft")
+  talents.append("Grudge-born Fury")
+  talents.append("Night Vision")
+  talents.append("Resistance to Magic")
+  talents.append("Stout-hearted")
+  talents.append("Sturdy")
+  
+if race == "elf":
+  attunement_or_longbow = input("Choose from the following talents: (1) Aethyric Attunement (2) Specialist Weapon Group (Longbow)" )
+  if attunement_or_longbow == "2":
+    talents.append("Specialist Weapons Group (Longbow)")
+  else:
+    talents.append("Aethyric Attunement")
+    
+  coolheaded_or_savvy = input("Choose from the following talents: (1) Coolheaded (2) Savvy" )
+  if coolheaded_or_savvy == "1":
+    talents.append("Coolheaded")
+  else:
+    talents.append("Savvy")
+    
+  skills.append("Common Knowledge (Elves)")
+  skills.append("Speak Language (Eltharin)")
+  skills.append("Speak Language (Reikspiel)")
+  talents.append("Excellent Vision")
+  talents.append("Night Vision")
+  
+if race == "halfling":
+  cook_or_farmer = input("Choose from the following skills: (1) Trade (Cook) (2) Trade (Farmer)" )
+  if cook_or_farmer == "1":
+    skills.append("Trade (Cook)")
+  else:
+    skills.append("Trade (Farmer)")
+
+  skills.append("Academic Knowledge (Geneology/Heraldry)")
+  skills.append("Common Knowledge (Halflings)")
+  skills.append("Speak Language (Halfling)")
+  skills.append("Speak Language (Reikspiel)")
+  talents.append("Night Vision")
+  talents.append("Resistance to Chaos")
+  talents.append("Speacialist Weapon Group (Sling)") 
+  talents.append(random_talent_list())
+  
+#use for loop to print skills
+skills.sort()
+talents.sort()
+print()
+print("Skills:")
+for i in range(len(skills)):
+  print(skills[i])
+print()
+print("Talents:")
+for i in range(len(talents)):
+  print(talents[i])
